@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
+//This add product Page is move to add models
 const AddProduct = () => {
   const productName= useRef("");
   const actualPrice= useRef("");
@@ -28,7 +29,7 @@ const AddProduct = () => {
 
   return (
     <div>
-        <Form>
+      <Form>
       <Form.Group className="mb-3" controlId="formName">
         <Form.Label>Product Name</Form.Label>
         <Form.Control type="text" placeholder="Enter name" 
