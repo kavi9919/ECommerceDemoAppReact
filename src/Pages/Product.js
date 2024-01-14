@@ -16,7 +16,8 @@ const Product = () => {
     const [products,setProducts]=useState([]);
     const[itemToDelete,setItemToDelete]=useState(0);
     useEffect(() => {
-        axios.get("https://localhost:7110/api/Shop/GetProduct").then((response) => {
+        axios.get("https://localhost:7110/api/Shop/GetProduct")
+        .then((response) => {
           setProducts((data) => {
             return response.data;
           });
@@ -80,6 +81,14 @@ const Product = () => {
                    </Button>
                    <Button variant="danger" onClick={()=>{showConfirmPopupHandler(p.id);}}>
                    Delete
+                   </Button>
+                  
+                   <Button variant="primary"
+                   onClick={ ()=>{
+                    navigate(`/product/${p.id}`)
+                   }
+                  }>
+                        More
                    </Button>
                 </Card.Body>
               </Card>
