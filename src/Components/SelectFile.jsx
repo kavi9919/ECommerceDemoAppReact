@@ -4,52 +4,40 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
-const AddModel = () => {
+import { uploadImage } from './AzureBlobUpload';
+const SelectFile = () => {
     const productName= useRef("");
     const actualPrice= useRef("");
     const discountedPrice= useRef("");
-    const productImage= useRef("");
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [uploadedFileName, setUploadedFileName] = useState('');
+    const imageInputRef = useRef(null)
+
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const handleFileChange = (event) => {
-      setSelectedFile(event.target.files[0]);
-    };
 
     function addProducts(){
-        var product={
+      const imageFile = imageInputRef.current.files[0];
+
+      if (imageFile) {
+        const imageUrl = uploadImage(imageFile);
+        const product = {
           name: productName.current.value,
-          image: uploadedFileName,
+          image: imageUrl.current.value,
           actualPrice: actualPrice.current.value,
           discountedPrice: discountedPrice.current.value,
-        }
-           axios.post("https://localhost:7110/api/Shop/PostProduct" ,product)
-           .then((respose) => {
-              handleClose();
-           })
+        };
+        axios.post('https://localhost:7110/api/Shop/PostProduct', product)
+        .then((response) => {
+          handleClose();
+        })
+        .catch((error) => {
+          console.error('Error adding product:', error);
+        });
+    } else {
+      console.error('No image selected for upload');
+    }
       }
-      const handleUpload = async () => {
-        try {
-          const formData = new FormData();
-          formData.append('imageFile', selectedFile);
-    
-          const response = await axios.post('https://localhost:7110/api/File/upload', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-    
-          });
-           // Set the uploaded filename received from the server response
-          setUploadedFileName(response.data);
-          alert("Upload Successfully..!");
-         
-        } catch (error) {
-          console.error('Error uploading image:', error);
-        }
-      };
     
   return (
     <div>
@@ -81,13 +69,8 @@ const AddModel = () => {
       </Form.Group>
 
        <Form.Group className="mb-3" controlId="formImage">
-        <Form.Label>Product Image</Form.Label>
-        <Form.Control type="file"
-         placeholder="Discounted Price"
-         onChange={handleFileChange} />
-         <Button variant="secondary" onClick={handleUpload}>
-            Upload
-          </Button>
+       <Form.Label>Product Image</Form.Label>
+          <Form.Control type="file"  />
       </Form.Group>
 
       
@@ -107,4 +90,4 @@ const AddModel = () => {
   )
 }
 
-export default AddModel
+export default SelectFile

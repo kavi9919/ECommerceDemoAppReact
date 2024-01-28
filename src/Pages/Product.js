@@ -62,7 +62,7 @@ const Product = () => {
           return (
             <Col key={p.id}>
               <Card>
-                <Card.Img variant="top" src={p.image} />
+                <Card.Img variant="top" src={"https://syntecblobstorage.blob.core.windows.net/products/" + p.image} />
                 <Card.Body>
                   <Card.Title>{p.name}</Card.Title>
                   <Card.Text>
